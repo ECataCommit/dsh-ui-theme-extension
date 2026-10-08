@@ -4,19 +4,21 @@ An installable dsh Web plug-in that registers an alternative palette through the
 
 ## Install
 
-The package is a dsh **bundle**. `package.json` declares `dsh.bundle` (the `cordis.patch.yml` layer that inserts the Loader row) and `dsh.client` (the browser half the Web client serves under `/plugins`). Build the artifacts, pack them, and install the tarball into the profile that boots the Web GUI:
+The package is a dsh **bundle**. `package.json` declares `dsh.bundle` (the `cordis.patch.yml` layer that inserts the Loader row) and `dsh.client` (the browser half the Web client serves under `/plugins`).
+
+Install the prebuilt artifact from the [latest release](https://github.com/ECataCommit/dsh-ui-theme-extension/releases/latest) into the profile that boots the Web GUI:
 
 ```sh
-pnpm --dir ui-theme-extension run build
-pnpm --dir ui-theme-extension pack
-pnpm dsh plugin --profile web add ./ui-theme-extension/dsh-ui-theme-extension-0.1.0.tgz
+dsh plugin --profile web add https://github.com/ECataCommit/dsh-ui-theme-extension/releases/download/v0.1.0/dsh-ui-theme-extension-0.1.0.tgz
 ```
+
+Do not install the repository directly (`pnpm add https://github.com/ECataCommit/dsh-ui-theme-extension`). pnpm prepares git-hosted dependencies from source, which needs an `allowBuilds` entry, and the build then resolves its TypeScript inputs through a parent dsh checkout (`../vendor/cordis`, `../packages/client/ui-theme`, `../node_modules/.bin`) that a standalone clone does not have. The release tarball carries the built artifacts and needs neither.
 
 `dsh plugin --profile <name> add <spec>` forwards to pnpm inside `$DSH_HOME/profiles/<name>`, and because the installed manifest declares `dsh.bundle`, the launcher appends `dsh-ui-theme-extension` to that profile's `dsh.profile.bundles` and applies its patch layer. Use `dsh plugin ...` with an installed CLI and `pnpm dsh plugin ...` from this checkout.
 
 Restart the Web process after installing, for example `pnpm dsh web`: the launcher reads the profile at startup, so a running server keeps serving the previous composition.
 
-The tarball carries only built artifacts (`lib/index.js`, `lib/client.js`, `lib/types/**/*.d.ts`). Installing it needs no build step and no `allowBuilds` entry; pnpm only resolves the package itself.
+The tarball carries only built artifacts (`lib/index.js`, `lib/client.js`, `lib/types/**/*.d.ts`). It is produced by `pnpm --dir ui-theme-extension pack`, whose `prepack` builds from source first. Installing the release artifact needs no build step and no `allowBuilds` entry; pnpm only resolves the package itself.
 
 ## Verify
 
