@@ -1,0 +1,6 @@
+# The dsh-ui-theme-extension bundle layer: inserts the Loader row whose package
+# declares dsh.client, so the Web client serves its built ./client bundle
+# beside @deepseek-ai/dsh-client-ui-theme.
+- insert:
+    - id: ui-theme-extension
+      name: dsh-ui-theme-extension

@@ -1,0 +1,52 @@
+{
+  "name": "dsh-ui-theme-extension",
+  "version": "0.1.0",
+  "description": "Installable dsh Web plug-in that registers an alternative palette through the client theme service",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "main": "./lib/index.js",
+  "types": "./lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": ["@deepseek-ai/dsh-client-ui-theme"]
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.5-alpha.1",
+    "@deepseek-ai/dsh-client-ui-theme": "^0.2.1-alpha.1"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.5-alpha.1",
+    "@deepseek-ai/dsh-client-ui-theme": "^0.2.1-alpha.1"
+  },
+  "scripts": {
+    "build": "../node_modules/.bin/tsc -b tsconfig.client.json && ../node_modules/.bin/tsdown --config tsdown.config.ts",
+    "prepack": "pnpm run build"
+  }
+}
