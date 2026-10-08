@@ -12,6 +12,8 @@ dsh plugin --profile web add https://github.com/ECataCommit/dsh-ui-theme-extensi
 
 Installing needs no `allowBuilds` entry and no build step. pnpm prepares a git-hosted dependency from source only when the manifest's `main` entry is absent from the fetched tree, so committing `lib/index.js` makes pnpm skip that preparation. `lib/client.js` and `lib/types/**/*.d.ts` are committed for the same reason: the installed package resolves its entries from them.
 
+The `@deepseek-ai/dsh-client-ui-theme` peer range (`^0.2.0-rc.2`) is what app-boot's compatibility preflight checks against the running dsh version, not against the installed theme package. Widen it only for runtimes whose theme service and client module protocol you have verified.
+
 Rebuilding those artifacts needs a dsh checkout, because `tsconfig.client.json` references `../vendor/cordis` and `../packages/client/ui-theme/tsconfig.client.json` and the `build` script uses `../node_modules/.bin`. Run `pnpm --dir ui-theme-extension run build` inside the checkout and commit the result. The [release tarball](https://github.com/ECataCommit/dsh-ui-theme-extension/releases/latest) carries the same files for release-based installs:
 
 ```sh
