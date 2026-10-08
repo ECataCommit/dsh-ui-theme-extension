@@ -1,6 +1,6 @@
 {
   "name": "dsh-ui-theme-extension",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Installable dsh Web plug-in that registers an alternative palette through the client theme service",
   "license": "MIT",
   "type": "module",

@@ -17,7 +17,7 @@ The `@deepseek-ai/dsh-client-ui-theme` peer range (`^0.2.0-rc.2`) is what app-bo
 Rebuilding those artifacts needs a dsh checkout, because `tsconfig.client.json` references `../vendor/cordis` and `../packages/client/ui-theme/tsconfig.client.json` and the `build` script uses `../node_modules/.bin`. Run `pnpm --dir ui-theme-extension run build` inside the checkout and commit the result. The [release tarball](https://github.com/ECataCommit/dsh-ui-theme-extension/releases/latest) carries the same files for release-based installs:
 
 ```sh
-dsh plugin --profile web add https://github.com/ECataCommit/dsh-ui-theme-extension/releases/download/v0.1.0/dsh-ui-theme-extension-0.1.0.tgz
+dsh plugin --profile web add https://github.com/ECataCommit/dsh-ui-theme-extension/releases/download/v0.1.1/dsh-ui-theme-extension-0.1.1.tgz
 ```
 
 `dsh plugin --profile <name> add <spec>` forwards to pnpm inside `$DSH_HOME/profiles/<name>`, and because the installed manifest declares `dsh.bundle`, the launcher appends `dsh-ui-theme-extension` to that profile's `dsh.profile.bundles` and applies its patch layer. Use `dsh plugin ...` with an installed CLI and `pnpm dsh plugin ...` from this checkout.
