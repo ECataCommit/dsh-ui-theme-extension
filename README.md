@@ -4,21 +4,25 @@ An installable dsh Web plug-in that registers an alternative palette through the
 
 ## Install
 
-The package is a dsh **bundle**. `package.json` declares `dsh.bundle` (the `cordis.patch.yml` layer that inserts the Loader row) and `dsh.client` (the browser half the Web client serves under `/plugins`).
+The package is a dsh **bundle**. `package.json` declares `dsh.bundle` (the `cordis.patch.yml` layer that inserts the Loader row) and `dsh.client` (the browser half the Web client serves under `/plugins`). Add the repository in the GUI, or from the CLI:
 
-Install the prebuilt artifact from the [latest release](https://github.com/ECataCommit/dsh-ui-theme-extension/releases/latest) into the profile that boots the Web GUI:
+```sh
+dsh plugin --profile web add https://github.com/ECataCommit/dsh-ui-theme-extension
+```
+
+Installing needs no `allowBuilds` entry and no build step. pnpm prepares a git-hosted dependency from source only when the manifest's `main` entry is absent from the fetched tree, so committing `lib/index.js` makes pnpm skip that preparation. `lib/client.js` and `lib/types/**/*.d.ts` are committed for the same reason: the installed package resolves its entries from them.
+
+Rebuilding those artifacts needs a dsh checkout, because `tsconfig.client.json` references `../vendor/cordis` and `../packages/client/ui-theme/tsconfig.client.json` and the `build` script uses `../node_modules/.bin`. Run `pnpm --dir ui-theme-extension run build` inside the checkout and commit the result. The [release tarball](https://github.com/ECataCommit/dsh-ui-theme-extension/releases/latest) carries the same files for release-based installs:
 
 ```sh
 dsh plugin --profile web add https://github.com/ECataCommit/dsh-ui-theme-extension/releases/download/v0.1.0/dsh-ui-theme-extension-0.1.0.tgz
 ```
 
-Do not install the repository directly (`pnpm add https://github.com/ECataCommit/dsh-ui-theme-extension`). pnpm prepares git-hosted dependencies from source, which needs an `allowBuilds` entry, and the build then resolves its TypeScript inputs through a parent dsh checkout (`../vendor/cordis`, `../packages/client/ui-theme`, `../node_modules/.bin`) that a standalone clone does not have. The release tarball carries the built artifacts and needs neither.
-
 `dsh plugin --profile <name> add <spec>` forwards to pnpm inside `$DSH_HOME/profiles/<name>`, and because the installed manifest declares `dsh.bundle`, the launcher appends `dsh-ui-theme-extension` to that profile's `dsh.profile.bundles` and applies its patch layer. Use `dsh plugin ...` with an installed CLI and `pnpm dsh plugin ...` from this checkout.
 
 Restart the Web process after installing, for example `pnpm dsh web`: the launcher reads the profile at startup, so a running server keeps serving the previous composition.
 
-The tarball carries only built artifacts (`lib/index.js`, `lib/client.js`, `lib/types/**/*.d.ts`). It is produced by `pnpm --dir ui-theme-extension pack`, whose `prepack` builds from source first. Installing the release artifact needs no build step and no `allowBuilds` entry; pnpm only resolves the package itself.
+Both the repository and the tarball carry the built artifacts (`lib/index.js`, `lib/client.js`, `lib/types/**/*.d.ts`) beside the sources. The tarball is produced by `pnpm --dir ui-theme-extension pack`, whose `prepack` builds from source first. A git install runs no lifecycle script, so nothing in the installed profile needs an `allowBuilds` entry.
 
 ## Verify
 

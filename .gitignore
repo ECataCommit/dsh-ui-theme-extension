@@ -1,2 +1,9 @@
-lib/
+# The built artifacts are committed so that installing from the git repository
+# works without an allowBuilds entry. Only shipped files are tracked.
+lib/index.mjs
+lib/tsconfig.client.tsbuildinfo
+lib/types/**/*.js
+lib/types/**/*.js.map
+lib/types/**/*.d.ts.map
+
 *.tgz
